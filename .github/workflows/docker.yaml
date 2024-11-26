@@ -26,7 +26,7 @@ jobs:
       run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
 
     - name: Publish code to DockerHub
-      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ secrets.DOCKER_USERNAME}}/${{ env.IMAGE_NAME }}:latest
 
     - name: GHCR Login
       uses: docker/login-action@v2.2.0
