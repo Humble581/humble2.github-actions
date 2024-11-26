@@ -1,16 +1,18 @@
 name: Docker Workflow
 
 on:
-  - push
+  push:
+    branches:
+      - main
 
 env:
-    CONTAINER_REGISTRY: docker.io
-    IMAGE_NAME: humble15/resume-app
+  CONTAINER_REGISTRY: docker.io
+  IMAGE_NAME: humble15/resume-app
 
 permissions:
-    id-token: write
-    contents: write
-    packages: write
+  id-token: write
+  contents: write
+  packages: write
 
 jobs: 
   docker_build: 
@@ -19,24 +21,25 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Docker Build
-      run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+    - name: Docker Login to DockerHub
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-    - name: Docker Login
-      run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Tag Docker Image
+      run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
 
-    - name: Publish code to DockerHub
-      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+    - name: Push Image to DockerHub
+      run: docker push ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
     - name: GHCR Login
-      uses: docker/login-action@v2.2.0
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}  
         password: ${{ secrets.GITHUB_TOKEN }}  
 
-    - name: Publish code to GHCR
-      run: |
-        docker build -t ghcr.io/jomacs-it/resume-app:latest .
-        docker push ghcr.io/jomacs-it/resume-app:latest
+    - name: Build and Tag for GHCR
+      run: docker build -t ghcr.io/${{ github.actor }}/resume-app:latest .
 
+    - name: Push Image to GHCR
+      run: docker push ghcr.io/${{ github.actor }}/resume-app:latest
