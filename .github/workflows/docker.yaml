@@ -8,6 +8,10 @@ on:
 env:
   CONTAINER_REGISTRY: docker.io
   IMAGE_NAME: resume-app
+permissions:
+    id-token: write
+    contents: write
+    packages: write
 
 jobs: 
   docker_build: 
