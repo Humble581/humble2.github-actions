@@ -45,5 +45,8 @@ jobs:
     - name: Build and Tag Docker Image for GitHub Container Registry (GHCR)
       run: docker build -t ghcr.io/humble581/resume-app:latest .
 
+    - name: Docker Build
+      run: docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+
     - name: Publish Image to GHCR
       run: docker push ghcr.io/humble15/resume-app:latest
