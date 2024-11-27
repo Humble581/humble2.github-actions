@@ -43,7 +43,7 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}  # GITHUB_TOKEN with write permissions
 
     - name: Build and Tag Docker Image for GitHub Container Registry (GHCR)
-      run: docker build -t ghcr.io/humble15/${{ env.IMAGE_NAME }}:latest .
+      run: docker build -t ghcr.io/humble581/resume-app:latest .
 
     - name: Publish Image to GHCR
-      run: docker push ghcr.io/humble15/${{ env.IMAGE_NAME }}:latest
+      run: docker push ghcr.io/humble15/resume-app:latest
