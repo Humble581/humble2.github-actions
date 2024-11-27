@@ -43,6 +43,6 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }} 
     - name: publish to gcr
       run: |
-          docker build . --tag ghcr.io/Humble581/resume-app:latest .
+          docker build  -t ghcr.io/Humble581/resume-app:latest .
           docker push ghcr.io/Humble581/resume-app:latest
  # automatically generated and used by github. You don't need to do anything here.
