@@ -1,4 +1,4 @@
-name: Docker Workfloww
+name: Docker Workflow
 
 on:
   push:
@@ -8,10 +8,11 @@ on:
 env:
   CONTAINER_REGISTRY: docker.io
   IMAGE_NAME: resume-app
+
 permissions:
-    id-token: write
-    contents: write
-    packages: write
+  id-token: write
+  contents: write
+  packages: write  # Allows pushing to GitHub Container Registry (GHCR)
 
 jobs: 
   docker_build: 
@@ -34,16 +35,15 @@ jobs:
     - name: Publish Image to DockerHub
       run: docker push ${{ env.CONTAINER_REGISTRY }}/humble15/${{ env.IMAGE_NAME }}:latest
 
-      - name: GHCR Login
+    - name: GHCR Login
       uses: docker/login-action@v2.2.0
       with:
         registry: ghcr.io
         username: ${{ github.actor }}  # GitHub actor
-        password: ${{ secrets.GITHUB_TOKEN }}  # Use the GITHUB_TOKEN with write permissions
+        password: ${{ secrets.GITHUB_TOKEN }}  # GITHUB_TOKEN with write permissions
 
     - name: Build and Tag Docker Image for GitHub Container Registry (GHCR)
-      run: docker build -t ghcr.io/humble15/resume-app:latest .
+      run: docker build -t ghcr.io/humble15/${{ env.IMAGE_NAME }}:latest .
 
     - name: Publish Image to GHCR
-      run: docker push ghcr.io/humble15/resume-app:latest
-
+      run: docker push ghcr.io/humble15/${{ env.IMAGE_NAME }}:latest
