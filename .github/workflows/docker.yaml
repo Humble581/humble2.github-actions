@@ -44,5 +44,5 @@ jobs:
     - name: publish to gcr
       run: |
           docker build  -t ghcr.io/humble581/resume-app:latest .
-          docker push ghcr.io/Humble581/resume-app:latest
+          docker push ghcr.io/humble581/resume-app:latest
  # automatically generated and used by github. You don't need to do anything here.
